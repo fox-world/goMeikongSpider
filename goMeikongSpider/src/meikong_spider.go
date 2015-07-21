@@ -13,11 +13,13 @@ import (
 )
 
 func main() {
-	meikongSpider()
+	meikongSpider("http://www.moko.cc/channels/post/23/1.html")
 }
 
-func meikongSpider() {
-	doc, err := goquery.NewDocument("http://www.moko.cc/channels/post/23/1.html")
+var num int = 0
+
+func meikongSpider(url string) {
+	doc, err := goquery.NewDocument(url)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -27,13 +29,22 @@ func meikongSpider() {
 		name = strings.Replace(name, ".", "", -1)
 		click := s.Find("li").Eq(2).Find("span").Text()
 		href, _ := s.Find("div.cover>a").Attr("href")
-		fmt.Println("模特", i+1, ":", name)
+		num = num+1
+		fmt.Println("模特", num, ":", name)
 		fmt.Println("点击量:", click)
-		url := "http://www.moko.cc" + href
+		url = "http://www.moko.cc" + href
 		fmt.Println("个人主页:", url)
 		getModelInfo(url, name)
 		fmt.Println("-----------------------")
 	})
+	
+	node := doc.Find("p.page>a").Last()
+	_,exists := node.Attr("hidefocus")
+	if exists{
+	    next,_ := node.Attr("href")
+	    next = "http://www.moko.cc"+next
+        meikongSpider(next)
+	}
 
 }
 
