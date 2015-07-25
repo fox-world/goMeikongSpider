@@ -21,25 +21,28 @@ type Model struct {
 }
 
 func main() {
-	meikongSpider("http://www.moko.cc/channels/post/23/1.html")
+	session, err := mgo.Dial("127.0.0.1")
+	defer session.Close()
+
+	if err != nil {
+		panic(err)
+	}
+
+	session.SetMode(mgo.Monotonic, true)
+	models := session.DB("meikong").C("model")
+	//先删除所有的记录
+	models.RemoveAll(nil)
+
+	meikongSpider("http://www.moko.cc/channels/post/23/1.html", models)
 }
 
 var num int = 0
 
-func meikongSpider(url string) {
+func meikongSpider(url string, models *mgo.Collection) {
 	doc, err := goquery.NewDocument(url)
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	session, err := mgo.Dial("127.0.0.1")
-	defer session.Close()
-
-	session.SetMode(mgo.Monotonic, true)
-	m := session.DB("meikong").C("model")
-	
-	//先删除所有的记录
-	m.RemoveAll(nil)
 
 	doc.Find("div.index-module.noborder-module>div.w970>ul.post.small-post").Each(func(i int, s *goquery.Selection) {
 		name := s.Find("li>a.nickname").Text()
@@ -52,15 +55,14 @@ func meikongSpider(url string) {
 		url = "http://www.moko.cc" + href
 		fmt.Println("个人主页:", url)
 		getModelInfo(url, name)
-		fmt.Println("-----------------------")
 
 		clicknum, _ := strconv.Atoi(click)
-		err = m.Insert(&Model{Name: name, Click: clicknum, Page: url})
+		err = models.Insert(&Model{Name: name, Click: clicknum, Page: url})
 
 		if err != nil {
 			panic(err)
 		} else {
-			fmt.Println("**********insert data success****************")
+			fmt.Println("-------------insert data for model", name, "success-------------------")
 		}
 	})
 
@@ -69,7 +71,7 @@ func meikongSpider(url string) {
 	if exists {
 		next, _ := node.Attr("href")
 		next = "http://www.moko.cc" + next
-		//meikongSpider(next)
+		meikongSpider(next, models)
 	}
 
 }
