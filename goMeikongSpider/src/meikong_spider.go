@@ -15,9 +15,10 @@ import (
 )
 
 type Model struct {
-	Name  string
-	Click int
-	Page  string
+	Name    string
+	Click   int
+	Page    string
+	Address []string
 }
 
 func main() {
@@ -54,10 +55,10 @@ func meikongSpider(url string, models *mgo.Collection) {
 		fmt.Println("点击量:", click)
 		url = "http://www.moko.cc" + href
 		fmt.Println("个人主页:", url)
-		getModelInfo(url, name)
-
+		images := getModelInfo(url, name)
 		clicknum, _ := strconv.Atoi(click)
-		err = models.Insert(&Model{Name: name, Click: clicknum, Page: url})
+
+		err = models.Insert(&Model{Name: name, Click: clicknum, Page: url, Address: images})
 
 		if err != nil {
 			panic(err)
@@ -76,7 +77,9 @@ func meikongSpider(url string, models *mgo.Collection) {
 
 }
 
-func getModelInfo(url string, name string) {
+func getModelInfo(url string, name string) []string {
+
+	images := make([]string, 0)
 
 	doc, err := goquery.NewDocument(url)
 	if err != nil {
@@ -95,8 +98,10 @@ func getModelInfo(url string, name string) {
 		}
 		name := src[strings.LastIndex(src, "/")+1:]
 		saveFileFromUrl(src, dir, name)
+		images = append(images, src)
 	})
 
+	return images
 }
 
 func saveFileFromUrl(url string, dir string, name string) {
