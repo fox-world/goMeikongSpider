@@ -15,7 +15,7 @@ import (
 	"strings"
 )
 
-func MeikongSpider(url string,num int, modelCollection *mgo.Collection) {
+func MeikongSpider(url string, num int, modelCollection *mgo.Collection) {
 	doc, err := goquery.NewDocument(url)
 	if err != nil {
 		log.Fatal(err)
@@ -48,7 +48,7 @@ func MeikongSpider(url string,num int, modelCollection *mgo.Collection) {
 	if exists {
 		next, _ := node.Attr("href")
 		next = "http://www.moko.cc" + next
-		MeikongSpider(next,num,modelCollection)
+		MeikongSpider(next, num, modelCollection)
 	}
 
 }
