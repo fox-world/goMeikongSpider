@@ -6,6 +6,7 @@ import (
 	"io"
 	"labix.org/v2/mgo"
 	"log"
+	"models"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -13,13 +14,6 @@ import (
 	"strconv"
 	"strings"
 )
-
-type Model struct {
-	Name    string
-	Click   int
-	Page    string
-	Address []string
-}
 
 func main() {
 	session, err := mgo.Dial("127.0.0.1")
@@ -30,16 +24,16 @@ func main() {
 	}
 
 	session.SetMode(mgo.Monotonic, true)
-	models := session.DB("meikong").C("model")
+	modelCollection := session.DB("meikong").C("model")
 	//先删除所有的记录
-	models.RemoveAll(nil)
+	modelCollection.RemoveAll(nil)
 
-	meikongSpider("http://www.moko.cc/channels/post/23/1.html", models)
+	meikongSpider("http://www.moko.cc/channels/post/23/1.html", modelCollection)
 }
 
 var num int = 0
 
-func meikongSpider(url string, models *mgo.Collection) {
+func meikongSpider(url string, modelCollection *mgo.Collection) {
 	doc, err := goquery.NewDocument(url)
 	if err != nil {
 		log.Fatal(err)
@@ -58,7 +52,7 @@ func meikongSpider(url string, models *mgo.Collection) {
 		images := getModelInfo(url, name)
 		clicknum, _ := strconv.Atoi(click)
 
-		err = models.Insert(&Model{Name: name, Click: clicknum, Page: url, Address: images})
+		err = modelCollection.Insert(&models.Model{Name: name, Click: clicknum, Page: url, Address: images})
 
 		if err != nil {
 			panic(err)
@@ -72,13 +66,14 @@ func meikongSpider(url string, models *mgo.Collection) {
 	if exists {
 		next, _ := node.Attr("href")
 		next = "http://www.moko.cc" + next
-		meikongSpider(next, models)
+		meikongSpider(next, modelCollection)
 	}
 
 }
 
 func getModelInfo(url string, name string) []string {
 
+	//利用数组切片来存储图片，避免需要预先定义数组的大小
 	images := make([]string, 0)
 
 	doc, err := goquery.NewDocument(url)
