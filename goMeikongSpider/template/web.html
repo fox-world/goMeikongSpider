@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Golang HTML5网络爬虫测试</title>
+<script type="text/javascript" src="/static/js/jquery-1.8.3.min.js"></script>
+ <script type="text/javascript">
+         var sock = null;
+         var wsuri = "ws://127.0.0.1:8004";
+         var index  = 0;
+ 
+         function startSpider() {
+ 
+            console.log("onload");
+ 
+            sock = new WebSocket(wsuri);
+ 
+            sock.onopen = function() {
+            	index = 0;
+                console.log("connected to " + wsuri);
+            }
+ 
+            sock.onclose = function(e) {
+               console.log("connection closed (" + e.code + ")");
+               $("#msg").empty();
+               $("#cnt").html(index);
+            }
+ 
+            sock.onmessage = function(e) {
+               console.log("message received: " + e.data);
+               index++;
+               $("#cnt").html(index);
+               if(index%15==0){
+                   $("#msg").html(e.data);
+               }else{
+                   $("#msg").append("<br/>"+e.data); 
+               }
+            }
+         };
+ 
+         function closeSpider() {
+            sock.send("closeSpider");
+         };
+      </script>
+</head>
+<body>
+      <h1>Golang HTML5网络爬虫测试</h1>
+      <button type="button" onclick="startSpider()">开始抓取美女信息!</button>&nbsp;
+      <button type="button" onclick="closeSpider()">停止抓取美女信息!</button>
+      <br/>
+      <div style="color:#0099cc;font-weight:bold;">共获取了<span id="cnt">0</span>张图片</div> 
+      <span id="msg"></span>
+
+</body>
+</html>

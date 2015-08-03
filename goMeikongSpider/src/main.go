@@ -1,22 +1,27 @@
 package main
 
 import (
-	"labix.org/v2/mgo"
+	"code.google.com/p/go.net/websocket"
+	"html/template"
+	"log"
+	"net/http"
 	"service"
 )
 
+func chat(w http.ResponseWriter, r *http.Request) {
+	t, _ := template.ParseFiles("template/web.html")
+	t.Execute(w, nil)
+}
+
 func main() {
-	session, err := mgo.Dial("127.0.0.1")
-	defer session.Close()
 
-	if err != nil {
-		panic(err)
+	var url = "http://www.moko.cc/channels/post/23/1.html"
+	var num = 0
+	http.Handle("/", websocket.Handler(service.EchoServer(url, num)))
+
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+	http.HandleFunc("/chat", chat)
+	if err := http.ListenAndServe(":8004", nil); err != nil {
+		log.Fatal("ListentAndServe:", err)
 	}
-
-	session.SetMode(mgo.Monotonic, true)
-	modelCollection := session.DB("meikong").C("model")
-	//先删除所有的记录
-	modelCollection.RemoveAll(nil)
-
-	service.MeikongSpider("http://www.moko.cc/channels/post/23/1.html", 0, modelCollection)
 }

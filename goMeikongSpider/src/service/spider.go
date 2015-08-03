@@ -1,6 +1,7 @@
 package service
 
 import (
+	"code.google.com/p/go.net/websocket"
 	"fmt"
 	"github.com/PuerkitoBio/goquery"
 	"io"
@@ -13,9 +14,28 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 )
 
-func MeikongSpider(url string, num int, modelCollection *mgo.Collection) {
+func EchoServer(url string, num int) websocket.Handler {
+	return func(ws *websocket.Conn) {
+
+		session, err := mgo.Dial("127.0.0.1")
+		defer session.Close()
+
+		if err != nil {
+			panic(err)
+		}
+
+		session.SetMode(mgo.Monotonic, true)
+		modelCollection := session.DB("meikong").C("model")
+		//先删除所有的记录
+		modelCollection.RemoveAll(nil)
+		MeikongSpider(ws, url, num, modelCollection)
+	}
+}
+
+func MeikongSpider(ws *websocket.Conn, url string, num int, modelCollection *mgo.Collection) {
 	doc, err := goquery.NewDocument(url)
 	if err != nil {
 		log.Fatal(err)
@@ -31,8 +51,15 @@ func MeikongSpider(url string, num int, modelCollection *mgo.Collection) {
 		fmt.Println("点击量:", click)
 		url = "http://www.moko.cc" + href
 		fmt.Println("个人主页:", url)
-		images := getModelInfo(url, name)
+		images, imgLogs := getModelInfo(url, name)
 		clicknum, _ := strconv.Atoi(click)
+
+		for _, r := range imgLogs {
+			if err = websocket.Message.Send(ws, r); err != nil {
+				fmt.Println("Can't send")
+				break
+			}
+		}
 
 		err = modelCollection.Insert(&models.Model{Name: name, Click: clicknum, Page: url, Address: images})
 
@@ -48,15 +75,15 @@ func MeikongSpider(url string, num int, modelCollection *mgo.Collection) {
 	if exists {
 		next, _ := node.Attr("href")
 		next = "http://www.moko.cc" + next
-		MeikongSpider(next, num, modelCollection)
+		MeikongSpider(ws, next, num, modelCollection)
 	}
-
 }
 
-func getModelInfo(url string, name string) []string {
+func getModelInfo(url string, name string) ([]string, []string) {
 
 	//利用数组切片来存储图片，避免需要预先定义数组的大小
 	images := make([]string, 0)
+	imgLogs := make([]string, 0)
 
 	doc, err := goquery.NewDocument(url)
 	if err != nil {
@@ -74,14 +101,14 @@ func getModelInfo(url string, name string) []string {
 			src = src[:strings.LastIndex(src, "?")]
 		}
 		name := src[strings.LastIndex(src, "/")+1:]
-		saveFileFromUrl(src, dir, name)
+		imgLogs = append(imgLogs, saveFileFromUrl(src, dir, name))
 		images = append(images, src)
 	})
 
-	return images
+	return images, imgLogs
 }
 
-func saveFileFromUrl(url string, dir string, name string) {
+func saveFileFromUrl(url string, dir string, name string) string {
 	response, e := http.Get(url)
 	if e != nil {
 		log.Fatal(e)
@@ -98,4 +125,6 @@ func saveFileFromUrl(url string, dir string, name string) {
 	}
 	file.Close()
 	log.Println("create image", name, "success!")
+	logTime := time.Now().Format("2006-01-02 15:04:05")
+	return logTime + " create image " + name + " success!"
 }
