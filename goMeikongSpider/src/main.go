@@ -8,8 +8,8 @@ import (
 	"service"
 )
 
-func chat(w http.ResponseWriter, r *http.Request) {
-	t, _ := template.ParseFiles("template/web.html")
+func spider(w http.ResponseWriter, r *http.Request) {
+	t, _ := template.ParseFiles("template/spider.html")
 	t.Execute(w, nil)
 }
 
@@ -20,7 +20,7 @@ func main() {
 	http.Handle("/", websocket.Handler(service.EchoServer(url, num)))
 
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
-	http.HandleFunc("/chat", chat)
+	http.HandleFunc("/spider", spider)
 	if err := http.ListenAndServe(":8004", nil); err != nil {
 		log.Fatal("ListentAndServe:", err)
 	}

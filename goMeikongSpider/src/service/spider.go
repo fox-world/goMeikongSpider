@@ -53,10 +53,16 @@ func MeikongSpider(ws *websocket.Conn, url string, num int, modelCollection *mgo
 		fmt.Println("个人主页:", url)
 		images, imgLogs := getModelInfo(url, name)
 		clicknum, _ := strconv.Atoi(click)
+		
+		modelInfo := "模特"+strconv.Itoa(num)+ "."+name+"<br/>点击量:"+click+"<br/>个人主页"+url
+		if err = websocket.Message.Send(ws, modelInfo); err != nil {
+				log.Println("Can't send")
+		}
+		
 
 		for _, r := range imgLogs {
 			if err = websocket.Message.Send(ws, r); err != nil {
-				fmt.Println("Can't send")
+				log.Println("Can't send")
 				break
 			}
 		}
@@ -66,7 +72,7 @@ func MeikongSpider(ws *websocket.Conn, url string, num int, modelCollection *mgo
 		if err != nil {
 			panic(err)
 		} else {
-			fmt.Println("-------------insert data for model", name, "success-------------------")
+			log.Println("-------------insert data for model", name, "success-------------------")
 		}
 	})
 

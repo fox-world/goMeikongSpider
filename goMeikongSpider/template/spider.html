@@ -8,10 +8,11 @@
          var sock = null;
          var wsuri = "ws://127.0.0.1:8004";
          var index  = 0;
+         var modelInfo = null;
  
          function startSpider() {
  
-            console.log("onload");
+            console.log("start spider");
  
             sock = new WebSocket(wsuri);
  
@@ -27,13 +28,14 @@
             }
  
             sock.onmessage = function(e) {
-               console.log("message received: " + e.data);
-               index++;
-               $("#cnt").html(index);
-               if(index%15==0){
-                   $("#msg").html(e.data);
+               var message = e.data;
+               if(message.substring(0,2)=="模特"&&message!=modelInfo){
+            	   modelInfo=message;
+            	   $("#msg").html(message);
                }else{
-                   $("#msg").append("<br/>"+e.data); 
+                   index++;
+            	   $("#msg").append("<br/>"+message); 
+                   $("#cnt").html(index);
                }
             }
          };
