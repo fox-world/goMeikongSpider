@@ -67,7 +67,7 @@ func MeikongSpider(ws *websocket.Conn, url string, num int, modelCollection *mgo
 			}
 		}
 
-		err = modelCollection.Insert(&models.Model{Name: name, Click: clicknum, Page: url, Address: images})
+		err = modelCollection.Insert(&models.Model{Number:num,Name: name, Click: clicknum, Page: url, Address: images})
 
 		if err != nil {
 			panic(err)
