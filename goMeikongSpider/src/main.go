@@ -13,6 +13,12 @@ func spider(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, nil)
 }
 
+func list(w http.ResponseWriter, r *http.Request) {
+	t, _ := template.ParseFiles("template/model/list.html")
+	models := service.QueryPage()
+	t.Execute(w, models)
+}
+
 func main() {
 
 	var url = "http://www.moko.cc/channels/post/23/1.html"
@@ -21,6 +27,7 @@ func main() {
 
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 	http.HandleFunc("/spider", spider)
+	http.HandleFunc("/list", list)
 	if err := http.ListenAndServe(":8004", nil); err != nil {
 		log.Fatal("ListentAndServe:", err)
 	}

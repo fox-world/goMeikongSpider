@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>模特列表</title>
+<link rel="stylesheet" type="text/css" href="/static/js/bootstrap/css/bootstrap.min.css"/>
+<script type="text/javascript" src="/static/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="/static/js/bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+   	<div style="margin:15px;font-weight: bold;"><a href="spider">爬虫操作</a></div>
+	<div>
+		<b>测试模特列表</b>
+	</div>
+	<ul>
+		{{range .}}
+		<li>模特姓名:&nbsp;{{.Name}}&nbsp&nbsp;点击量:{{.Click}}</li> 
+		{{end}}
+	</ul>
+
+</body>
+</html>

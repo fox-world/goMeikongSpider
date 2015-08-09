@@ -1,7 +1,7 @@
 package models
 
 type Model struct {
-    Number int
+	Number  int
 	Name    string
 	Click   int
 	Page    string
