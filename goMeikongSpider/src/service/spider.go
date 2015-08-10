@@ -20,7 +20,7 @@ import (
 func EchoServer(url string, num int) websocket.Handler {
 	return func(ws *websocket.Conn) {
 
-		session, err := mgo.Dial("127.0.0.1")
+		session, err := mgo.Dial("mongodb://admin:123456@localhost/meikong")
 		defer session.Close()
 
 		if err != nil {

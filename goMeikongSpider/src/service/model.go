@@ -7,7 +7,7 @@ import (
 )
 
 func QueryPage() []models.Model {
-	session, err := mgo.Dial("127.0.0.1")
+	session, err := mgo.Dial("mongodb://admin:123456@localhost/meikong")
 
 	defer session.Close()
 
