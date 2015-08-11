@@ -17,10 +17,10 @@ import (
 	"time"
 )
 
-func EchoServer(url string, num int) websocket.Handler {
+func EchoServer(url string, num int, dburi string) websocket.Handler {
 	return func(ws *websocket.Conn) {
 
-		session, err := mgo.Dial("mongodb://admin:123456@localhost/meikong")
+		session, err := mgo.Dial(dburi)
 		defer session.Close()
 
 		if err != nil {

@@ -6,8 +6,8 @@ import (
 	"models"
 )
 
-func QueryPage() []models.Model {
-	session, err := mgo.Dial("mongodb://admin:123456@localhost/meikong")
+func QueryPage(dburi string) []models.Model {
+	session, err := mgo.Dial(dburi)
 
 	defer session.Close()
 
