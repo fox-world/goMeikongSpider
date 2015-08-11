@@ -87,8 +87,8 @@ func MeikongSpider(ws *websocket.Conn, url string, num int, modelCollection *mgo
 func getModelInfo(url string, name string) ([]string, []string) {
 
 	//利用数组切片来存储图片，避免需要预先定义数组的大小
-	images := make([]string, 0)
-	imgLogs := make([]string, 0)
+	var images []string
+	var imgLogs []string
 
 	doc, err := goquery.NewDocument(url)
 	if err != nil {
