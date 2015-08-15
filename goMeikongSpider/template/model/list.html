@@ -17,12 +17,12 @@
 		<b>测试模特列表</b>
 	</div>
 	<ul>
-		{{range .}}
-		<li>模特姓名:&nbsp;{{.Name}}&nbsp&nbsp;点击量:{{.Click}}
-			{{if .}}
+		{{range $model := .}}
+		<li>模特姓名:&nbsp;{{$model.Name}}&nbsp;&nbsp;点击量:{{$model.Click}}
+			{{if .Address}}
 				<ul>
-				{{range .Address}}
-					<li><img src="{{.}}"/></li>
+				{{range $s := .Address}}
+					<li><img src="模特/{{$model.Name}}/{{parseImage $s}}"/>&nbsp;</li>
 				{{end}}
 				</ul>
 			{{end}}

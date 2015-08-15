@@ -7,6 +7,7 @@ import (
 	"models"
 	"net/http"
 	"service"
+	"strings"
 )
 
 func spider(w http.ResponseWriter, r *http.Request) {
@@ -15,11 +16,20 @@ func spider(w http.ResponseWriter, r *http.Request) {
 }
 
 func list(dburi string) http.HandlerFunc {
+
 	return func(w http.ResponseWriter, r *http.Request) {
-		t, _ := template.ParseFiles("template/model/list.html")
+		t, _ := template.New("list.html").Funcs(funcMap).ParseFiles("template/model/list.html")
 		models := service.QueryPage(dburi)
 		t.Execute(w, models)
 	}
+}
+
+var funcMap = template.FuncMap{
+	"parseImage": parseImage,
+}
+
+func parseImage(str string) string {
+	return str[strings.LastIndex(str, "/")+1:]
 }
 
 func main() {
@@ -33,6 +43,7 @@ func main() {
 	http.Handle("/", websocket.Handler(service.EchoServer(url, num, config.DBuri)))
 
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+	http.Handle("/模特/", http.StripPrefix("/模特/", http.FileServer(http.Dir("模特"))))
 	http.HandleFunc("/spider", spider)
 	http.HandleFunc("/list", list(config.DBuri))
 	if err := http.ListenAndServe(":8004", nil); err != nil {
