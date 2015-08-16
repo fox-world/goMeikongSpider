@@ -1,24 +1,21 @@
 {{template "header" "模特列表"}}
 <body>
-	<div style="margin: 15px; font-weight: bold;">
-		<a href="spider">爬虫操作</a>
-	</div>
-	<div>
-		<b>测试模特列表</b>
-	</div>
-	<ul>
-		{{range $model := .}}
-		<li>模特姓名:&nbsp;{{$model.Name}}&nbsp;&nbsp;点击量:{{$model.Click}}
-			{{if .Address}}
-				<ul>
-				{{range $s := .Address}}
-					<li><img src="模特/{{$model.Name}}/{{parseImage $s}}"/>&nbsp;</li>
+	<div class="container">
+	
+		    {{template "navbar" "list"}}
+	
+			{{range $model := .}}
+			<li>模特姓名:&nbsp;{{$model.Name}}&nbsp;&nbsp;点击量:{{$model.Click}}&nbsp;&nbsp;个人主页:<b><a href="{{$model.Page}}">{{$model.Page}}</a></b>
+				{{if .Address}}
+					<ul>
+					{{range $s := .Address}}
+						<li><img src="模特/{{$model.Name}}/{{parseImage $s}}"/>&nbsp;</li>
+					{{end}}
+					</ul>
 				{{end}}
-				</ul>
+			</li> 
 			{{end}}
-		</li> 
-		{{end}}
-	</ul>
-
+		</ul>
+	</div>
 </body>
 </html>

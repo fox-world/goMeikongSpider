@@ -41,12 +41,17 @@
       </script>
 </head>
 <body>
-      <h1>Golang HTML5网络爬虫测试</h1>
-      <button type="button" onclick="startSpider()">开始抓取美女信息!</button>&nbsp;
-      <button type="button" onclick="closeSpider()">停止抓取美女信息!</button>
-      <br/>
-      <div style="color:#0099cc;font-weight:bold;">共获取了<span id="cnt">0</span>张图片</div> 
-      <span id="msg"></span>
-
+	<div class="container">
+		
+		{{template "navbar" "spider"}}
+		
+		<h1>Golang HTML5网络爬虫测试</h1>
+		<button type="button" onclick="startSpider()">开始抓取美女信息!</button>
+		&nbsp;
+		<button type="button" onclick="closeSpider()">停止抓取美女信息!</button>
+		<br />
+		<div style="color: #0099cc; font-weight: bold;">共获取了<span id="cnt">0</span>张图片</div>
+		<span id="msg"></span>
+	</div>
 </body>
 </html>

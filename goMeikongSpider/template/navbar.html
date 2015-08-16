@@ -1,0 +1,7 @@
+{{define "navbar"}}
+<ul class="nav nav-tabs">
+	<li role="presentation" {{if eq . "spider"}}class="active"{{end}}><a href="spider">爬取模特</a></li>
+	<li role="presentation" {{if eq . "list"}}class="active"{{end}}><a href="list">模特列表</a></li>
+	<li role="presentation"><a href="#">Messages</a></li>
+</ul>
+{{end}}
