@@ -3,15 +3,24 @@
 	<div class="container">
 	
 		    {{template "navbar" "list"}}
-	
+	        <ul>
 			{{range $model := .}}
-			<li>模特姓名:&nbsp;{{$model.Name}}&nbsp;&nbsp;点击量:{{$model.Click}}&nbsp;&nbsp;个人主页:<b><a href="{{$model.Page}}">{{$model.Page}}</a></b>
-				{{if .Address}}
-					<ul>
+			<li>{{$model.Number}}&nbsp;模特姓名:&nbsp;{{$model.Name}}&nbsp;&nbsp;点击量:{{$model.Click}}<br/>
+			    &nbsp;&nbsp;&nbsp;个人主页:<b><a href="{{$model.Page}}">{{$model.Page}}</a></b>
+				{{if .Address}}<br/>
+				<a role="button" data-toggle="collapse" href="#collapseExample__{{$model.Number}}" aria-expanded="false">
+				  &nbsp;&nbsp;&nbsp;<b>模特个人照片+</b>
+				</a>
+				<div class="collapse" id="collapseExample__{{$model.Number}}">
+				  <div class="well">
+				    <ul>
 					{{range $s := .Address}}
-						<li><img src="模特/{{$model.Name}}/{{parseImage $s}}"/>&nbsp;</li>
+						<li><img src="模特/{{$model.Name}}/{{parseImage $s}}" title="{{$model.Name}}_{{$s}}"/>&nbsp;</li>
 					{{end}}
 					</ul>
+				  </div>
+				</div>
+				
 				{{end}}
 			</li> 
 			{{end}}
