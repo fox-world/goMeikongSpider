@@ -7,6 +7,7 @@ import (
 	"models"
 	"net/http"
 	"service"
+	"strconv"
 	"strings"
 )
 
@@ -18,8 +19,17 @@ func spider(w http.ResponseWriter, r *http.Request) {
 func list(dburi string) http.HandlerFunc {
 
 	return func(w http.ResponseWriter, r *http.Request) {
+		params := r.URL.Query()
+		pageNo := 1
+		pageSize := 10
+		if params["pageNo"] != nil {
+			pageNo, _ = strconv.Atoi(params["pageNo"][0])
+		}
+		if params["pageSize"] != nil {
+			pageSize, _ = strconv.Atoi(params["pageSize"][0])
+		}
 		t, _ := template.New("list.html").Funcs(funcMap).ParseFiles("template/model/list.html", "template/header.html", "template/navbar.html")
-		models := service.QueryPage(dburi)
+		models := service.QueryPage(dburi, pageNo, pageSize)
 		t.Execute(w, models)
 	}
 }

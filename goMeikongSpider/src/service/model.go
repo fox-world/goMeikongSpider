@@ -6,8 +6,8 @@ import (
 	"models"
 )
 
-func QueryPage(dburi string) []models.Model {
-	session, err := mgo.Dial(dburi)
+func QueryPage(dbUri string, pageNo int, pageSize int) []models.Model {
+	session, err := mgo.Dial(dbUri)
 
 	defer session.Close()
 
@@ -15,7 +15,10 @@ func QueryPage(dburi string) []models.Model {
 
 	var results []models.Model
 
-	err = m.Find(bson.M{"number": bson.M{"$gte": 1, "$lte": 50}}).Sort("number").All(&results)
+	start := (pageNo - 1) * pageSize
+	end := pageNo * pageSize
+
+	err = m.Find(bson.M{"number": bson.M{"$gt": start, "$lte": end}}).Sort("number").All(&results)
 
 	if err != nil {
 		panic(err)
