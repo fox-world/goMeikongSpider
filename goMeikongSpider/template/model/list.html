@@ -5,7 +5,7 @@
 		    {{template "navbar" "list"}}
 	        <ul>
 			{{range $model := .}}
-			<li>{{$model.Number}}&nbsp;模特姓名:&nbsp;{{$model.Name}}&nbsp;&nbsp;点击量:{{$model.Click}}<br/>
+			<li>{{$model.Number}}&nbsp;模特姓名:&nbsp;{{$model.Name}}&nbsp;&nbsp;职业:{{$model.Job}}&nbsp;&nbsp;点击量:{{$model.Click}}<br/>
 			    &nbsp;&nbsp;&nbsp;个人主页:<b><a href="{{$model.Page}}">{{$model.Page}}</a></b>
 				{{if .Address}}<br/>
 				<a role="button" data-toggle="collapse" href="#collapseExample__{{$model.Number}}" aria-expanded="false">

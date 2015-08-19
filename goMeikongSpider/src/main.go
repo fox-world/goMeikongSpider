@@ -11,14 +11,14 @@ import (
 )
 
 func spider(w http.ResponseWriter, r *http.Request) {
-	t, _ := template.ParseFiles("template/spider.html","template/header.html","template/navbar.html")
+	t, _ := template.ParseFiles("template/spider.html", "template/header.html", "template/navbar.html")
 	t.Execute(w, nil)
 }
 
 func list(dburi string) http.HandlerFunc {
 
 	return func(w http.ResponseWriter, r *http.Request) {
-		t, _ := template.New("list.html").Funcs(funcMap).ParseFiles("template/model/list.html","template/header.html","template/navbar.html")
+		t, _ := template.New("list.html").Funcs(funcMap).ParseFiles("template/model/list.html", "template/header.html", "template/navbar.html")
 		models := service.QueryPage(dburi)
 		t.Execute(w, models)
 	}

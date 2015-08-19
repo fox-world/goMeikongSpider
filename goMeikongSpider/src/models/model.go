@@ -9,6 +9,7 @@ import (
 type Model struct {
 	Number  int
 	Name    string
+	Job     string
 	Click   int
 	Page    string
 	Address []string

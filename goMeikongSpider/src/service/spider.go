@@ -45,16 +45,18 @@ func MeikongSpider(ws *websocket.Conn, url string, num int, modelCollection *mgo
 		name := s.Find("li>a.nickname").Text()
 		name = strings.Replace(name, ".", "", -1)
 		click := s.Find("li").Eq(2).Find("span").Text()
+		job := s.Find("li").Eq(1).Find("span").Text()
 		href, _ := s.Find("div.cover>a").Attr("href")
 		num = num + 1
 		fmt.Println("模特", num, ":", name)
+		fmt.Println("职业:", job)
 		fmt.Println("点击量:", click)
 		url = "http://www.moko.cc" + href
 		fmt.Println("个人主页:", url)
 		images, imgLogs := getModelInfo(url, name)
 		clicknum, _ := strconv.Atoi(click)
 
-		modelInfo := "模特" + strconv.Itoa(num) + "." + name + "<br/>点击量:" + click + "<br/>个人主页" + url
+		modelInfo := "模特" + strconv.Itoa(num) + "." + name + "<br/>职业:" + job + "<br/>点击量:" + click + "<br/>个人主页" + url
 		if err = websocket.Message.Send(ws, modelInfo); err != nil {
 			log.Println("Can't send")
 		}
@@ -66,7 +68,7 @@ func MeikongSpider(ws *websocket.Conn, url string, num int, modelCollection *mgo
 			}
 		}
 
-		err = modelCollection.Insert(&models.Model{Number: num, Name: name, Click: clicknum, Page: url, Address: images})
+		err = modelCollection.Insert(&models.Model{Number: num, Name: name, Job: job, Click: clicknum, Page: url, Address: images})
 
 		if err != nil {
 			panic(err)
