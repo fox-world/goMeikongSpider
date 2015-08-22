@@ -16,7 +16,7 @@
 
 ##ToDo
 * 将爬虫的抓取过程修改为并发实现，缩短爬虫抓取的时间
-* 采用[beego](http://beego.me/)作为MVC框架的实现
+* 将Http请求的路由过程更改为统一的路由处理，避免在程序中定义过多的处理函数
 * 提供[REST](https://zh.wikipedia.org/wiki/REST)方式的对外Web Service接口
 * 利用[美空网](http://www.moko.cc/)的账号进行模拟登录，从而对每个模特抓取完整的图片
 * 模特图片分页与评论功能的添加
