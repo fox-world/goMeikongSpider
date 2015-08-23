@@ -9,17 +9,19 @@
 * [MongoDB2.6.4](https://www.mongodb.org/)
 * [BootstrapV3](http://getbootstrap.com/)
 * [WebSocket](https://www.websocket.org/)
+* [jQuery1.11.0](https://jquery.com/)
 
 ##Features
 * 从[美空网](http://www.moko.cc/)抓取模特图片，将模特信息存入[MongoDB2.6.4](https://www.mongodb.org/)数据库中，将模特图片下载存放到本地目录中
 * 利用[WebSocket](https://www.websocket.org/)来实时的显示爬虫抓取模特的信息
+* 以分页的方式显示模特照片
 
 ##ToDo
 * 将爬虫的抓取过程修改为并发实现，缩短爬虫抓取的时间
 * 将Http请求的路由过程更改为统一的路由处理，避免在程序中定义过多的处理函数
 * 提供[REST](https://zh.wikipedia.org/wiki/REST)方式的对外Web Service接口
 * 利用[美空网](http://www.moko.cc/)的账号进行模拟登录，从而对每个模特抓取完整的图片
-* 模特图片分页与评论功能的添加
+* 对模特照片进行添加评论与显示
 
 ##Display
 * 爬虫操作页面<br/>
