@@ -42,12 +42,12 @@
 			    </li>
 		    {{else}}
 		     <li>
-		      <a href="list?pageNo=1&pageSize={{.page.PageSize}}" aria-label="Previous">
+		      <a href="list" aria-label="Previous" title="第一页">
 		        <span aria-hidden="true">&laquo;&laquo;</span>
 		      </a>
 		     </li>
 		     <li>
-			      <a href="list?pageNo={{.page.Previous}}&pageSize={{.page.PageSize}}" aria-label="Previous">
+			      <a href="list?pageNo={{.page.Previous}}&pageSize={{.page.PageSize}}" aria-label="Previous" title="上一页">
 			        <span aria-hidden="true">&laquo;</span>
 			      </a>
 			    </li>
@@ -66,12 +66,12 @@
 			    </li>
 		    {{else}}
 			    <li>
-			      <a href="list?pageNo={{.page.Next}}&pageSize={{.page.PageSize}}" aria-label="Next">
+			      <a href="list?pageNo={{.page.Next}}&pageSize={{.page.PageSize}}" aria-label="Next" title="下一页">
 			        <span aria-hidden="true">&raquo;</span>
 			      </a>
 			    </li>
 			    <li>
-			      <a href="list?pageNo={{.page.TotalPage}}&pageSize={{.page.PageSize}}" aria-label="Next">
+			      <a href="list?pageNo={{.page.TotalPage}}&pageSize={{.page.PageSize}}" aria-label="Next" title="最后一页">
 			        <span aria-hidden="true">&raquo;&raquo;</span>
 			      </a>
 			    </li>

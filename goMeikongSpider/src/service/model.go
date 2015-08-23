@@ -30,24 +30,8 @@ func QueryPage(dbUri string, pageNo int, pageSize int) ([]models.Model, models.P
 		panic(err)
 	}
 
-	totalPage := 0
-	if totalRecord%pageSize == 0 {
-		totalPage = totalRecord / pageSize
-	} else {
-		totalPage = totalRecord/pageSize + 1
-	}
-
-	var next, previous = pageNo + 1, pageNo - 1
-
-	if pageNo == 1 {
-		previous = 1
-	}
-
-	if pageNo == totalPage {
-		next = totalPage
-	}
-
-	page := models.Page{PageNo: pageNo, PageSize: pageSize, TotalRecord: totalRecord, TotalPage: totalPage, Next: next, Previous: previous}
+	page := models.Page{PageNo: pageNo, PageSize: pageSize, TotalRecord: totalRecord}
+	page.CalculatePageInfo()
 
 	return results, page
 }

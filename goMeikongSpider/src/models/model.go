@@ -40,3 +40,25 @@ func (config *Config) ReadConfig() {
 		fmt.Println("Decode config file error:", err)
 	}
 }
+
+func (page *Page) CalculatePageInfo() {
+
+	var previous, next, totalPage = page.PageNo - 1, page.PageNo + 1, 0
+
+	if page.TotalRecord%page.PageSize == 0 {
+		totalPage = page.TotalRecord / page.PageSize
+	} else {
+		totalPage = page.TotalRecord/page.PageSize + 1
+	}
+
+	if page.PageNo == 1 {
+		previous = 1
+	}
+	if page.PageNo == page.TotalPage {
+		next = page.TotalPage
+	}
+
+	page.Previous = previous
+	page.Next = next
+	page.TotalPage = totalPage
+}
