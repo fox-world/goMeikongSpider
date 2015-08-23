@@ -4,7 +4,7 @@
 	
 		    {{template "navbar" "list"}}
 	        <ul>
-			{{range $model := .}}
+			{{range $model := .models}}
 			<li>{{$model.Number}}&nbsp;模特姓名:&nbsp;{{$model.Name}}&nbsp;&nbsp;职业:{{$model.Job}}&nbsp;&nbsp;点击量:{{$model.Click}}<br/>
 			    &nbsp;&nbsp;&nbsp;个人主页:<b><a href="{{$model.Page}}">{{$model.Page}}</a></b>
 				{{if .Address}}<br/>
@@ -25,6 +25,60 @@
 			</li> 
 			{{end}}
 		</ul>
+		<!-- 分页实现 -->
+		共有<b>{{.page.TotalRecord}}</b>条记录，共<b>{{.page.TotalPage}}</b>页，当前为第<b>{{.page.PageNo}}</b>页面
+		<nav>
+		  <ul class="pagination">
+		    {{if eq .page.PageNo 1}}
+			    <li class="disabled">
+			      <a href="javascript:void(0)" aria-label="Previous">
+			        <span aria-hidden="true">&laquo;&laquo;</span>
+			      </a>
+			    </li>
+			    <li class="disabled">
+			      <a href="javascript:void(0)" aria-label="Previous">
+			        <span aria-hidden="true">&laquo;</span>
+			      </a>
+			    </li>
+		    {{else}}
+		     <li>
+		      <a href="list?pageNo=1&pageSize={{.page.PageSize}}" aria-label="Previous">
+		        <span aria-hidden="true">&laquo;&laquo;</span>
+		      </a>
+		     </li>
+		     <li>
+			      <a href="list?pageNo={{.page.Previous}}&pageSize={{.page.PageSize}}" aria-label="Previous">
+			        <span aria-hidden="true">&laquo;</span>
+			      </a>
+			    </li>
+		    {{end}}
+		    <li class="active"><a href="javascript:void(0)">{{.page.PageNo}}</a></li>
+		    {{if eq .page.PageNo .page.TotalPage}}
+			    <li class="disabled">
+			      <a href="javascript:void(0)" aria-label="Next">
+			        <span aria-hidden="true">&raquo;</span>
+			      </a>
+			    </li>
+			    <li class="disabled">
+			      <a href="javascript:void(0)" aria-label="Next">
+			        <span aria-hidden="true">&raquo;&raquo;</span>
+			      </a>
+			    </li>
+		    {{else}}
+			    <li>
+			      <a href="list?pageNo={{.page.Next}}&pageSize={{.page.PageSize}}" aria-label="Next">
+			        <span aria-hidden="true">&raquo;</span>
+			      </a>
+			    </li>
+			    <li>
+			      <a href="list?pageNo={{.page.TotalPage}}&pageSize={{.page.PageSize}}" aria-label="Next">
+			        <span aria-hidden="true">&raquo;&raquo;</span>
+			      </a>
+			    </li>
+		    {{end}}
+		  </ul>
+		</nav>
+
 	</div>
 </body>
 </html>

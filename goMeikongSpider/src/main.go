@@ -29,8 +29,8 @@ func list(dburi string) http.HandlerFunc {
 			pageSize, _ = strconv.Atoi(params["pageSize"][0])
 		}
 		t, _ := template.New("list.html").Funcs(funcMap).ParseFiles("template/model/list.html", "template/header.html", "template/navbar.html")
-		models := service.QueryPage(dburi, pageNo, pageSize)
-		t.Execute(w, models)
+		models, page := service.QueryPage(dburi, pageNo, pageSize)
+		t.Execute(w, map[string]interface{}{"models": models, "page": page})
 	}
 }
 

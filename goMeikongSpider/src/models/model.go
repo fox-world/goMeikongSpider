@@ -6,6 +6,15 @@ import (
 	"os"
 )
 
+type Page struct {
+	PageNo      int
+	PageSize    int
+	Next        int
+	Previous    int
+	TotalRecord int
+	TotalPage   int
+}
+
 type Model struct {
 	Number  int
 	Name    string
