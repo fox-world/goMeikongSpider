@@ -2,7 +2,7 @@ package models
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 	"os"
 )
 
@@ -32,12 +32,12 @@ func (config *Config) ReadConfig() {
 	pwd, _ := os.Getwd()
 	file, err := os.Open(pwd + "/src/config.json")
 	if err != nil {
-		fmt.Println("Open config file error:", err)
+		log.Println("Open config file error:", err)
 	}
 	decoder := json.NewDecoder(file)
 	err = decoder.Decode(config)
 	if err != nil {
-		fmt.Println("Decode config file error:", err)
+		log.Println("Decode config file error:", err)
 	}
 }
 
