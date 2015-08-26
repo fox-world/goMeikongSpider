@@ -20,7 +20,6 @@
 					</ul>
 				  </div>
 				</div>
-				
 				{{end}}
 			</li> 
 			{{end}}
@@ -52,7 +51,15 @@
 			      </a>
 			    </li>
 		    {{end}}
-		    <li class="active"><a href="javascript:void(0)">{{.page.PageNo}}</a></li>
+		    {{$pageNo := .page.PageNo}}
+		    {{$pageSize := .page.PageSize}}
+		    {{range $n := .page.Pages}}
+			    {{if eq $n $pageNo}}
+				     <li class="active"><a href="javascript:void(0)">{{$pageNo}}</a></li>
+				 {{else}}
+				     <li><a href="list?pageNo={{$n}}&pageSize={{$pageSize}}">{{$n}}</a></li>
+				{{end}}
+		    {{end}}
 		    {{if eq .page.PageNo .page.TotalPage}}
 			    <li class="disabled">
 			      <a href="javascript:void(0)" aria-label="Next">

@@ -11,7 +11,7 @@ func QueryPage(dbUri string, pageNo int, pageSize int) ([]models.Model, models.P
 
 	defer session.Close()
 
-	m := session.DB("meikong").C("modelbackup")
+	m := session.DB("meikong").C("model")
 
 	var results []models.Model
 
