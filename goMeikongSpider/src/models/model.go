@@ -13,6 +13,7 @@ type Page struct {
 	Previous    int
 	TotalRecord int
 	TotalPage   int
+	Pages[] int
 }
 
 type Model struct {
@@ -43,7 +44,7 @@ func (config *Config) ReadConfig() {
 
 func (page *Page) CalculatePageInfo() {
 
-	var previous, next, totalPage = page.PageNo - 1, page.PageNo + 1, 0
+	var previous, next, totalPage,start,end = page.PageNo - 1, page.PageNo + 1, 0,0,0
 
 	if page.TotalRecord%page.PageSize == 0 {
 		totalPage = page.TotalRecord / page.PageSize
@@ -57,8 +58,25 @@ func (page *Page) CalculatePageInfo() {
 	if page.PageNo == page.TotalPage {
 		next = page.TotalPage
 	}
+	
+	if page.PageNo-2<=1{
+	   start = 1
+	}else{
+	   start =page.PageNo-2
+	}
+	
+	if page.PageNo+2>=totalPage{
+	  end = totalPage
+	}else{
+	  end = page.PageNo+2
+	}
 
 	page.Previous = previous
 	page.Next = next
 	page.TotalPage = totalPage
+	
+	page.Pages = make([]int,end-start+1)
+	for i:=start;i<=end;i++{
+	   page.Pages[i-start]=i
+	}
 }
