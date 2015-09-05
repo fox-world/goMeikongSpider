@@ -53,13 +53,15 @@ func MeikongSpider(ws *websocket.Conn, url string, num int, modelCollection *mgo
 		fmt.Println("点击量:", click)
 		url = "http://www.moko.cc" + href
 		fmt.Println("个人主页:", url)
-		images := parseModelInfo(ws, url, name)
+
 		clicknum, _ := strconv.Atoi(click)
 
-		modelInfo := "模特" + strconv.Itoa(num) + "." + name + "<br/>职业:" + job + "<br/>点击量:" + click + "<br/>个人主页" + url
+		modelInfo := "模特" + strconv.Itoa(num) + "." + name + "<br/>职业:" + job + "<br/>点击量:" + click + "<br/>个人主页:" + url
 		if err = websocket.Message.Send(ws, modelInfo); err != nil {
 			log.Println("Can't send")
 		}
+
+		images := parseModelInfo(ws, url, name)
 
 		err = modelCollection.Insert(&models.Model{Number: num, Name: name, Job: job, Click: clicknum, Page: url, Address: images})
 
