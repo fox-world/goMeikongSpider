@@ -5,8 +5,10 @@
 		    {{template "navbar" "list"}}
 	        <ul>
 			{{range $model := .models}}
-			<li>{{$model.Number}}&nbsp;模特姓名:&nbsp;{{$model.Name}}&nbsp;&nbsp;职业:{{$model.Job}}&nbsp;&nbsp;点击量:{{$model.Click}}<br/>
-			    &nbsp;&nbsp;&nbsp;个人主页:<b><a href="{{$model.Page}}">{{$model.Page}}</a></b>
+			<li>{{$model.Number}}&nbsp;模特姓名:&nbsp;{{$model.Name}}<br/>&nbsp;&nbsp;&nbsp;职业:{{$model.Job}}<br/>&nbsp;&nbsp;&nbsp;点击量:{{$model.Click}}<br/>
+			    &nbsp;&nbsp;&nbsp;个人主页:<b><a href="{{$model.Page}}">{{$model.Page}}</a></b><br/>
+			    {{$imageURL := index .Address 0}}
+			    &nbsp;&nbsp;&nbsp;<img src="模特/{{$model.Name}}/{{parseImage $imageURL}}" style="width:200px;"/>
 				{{if .Address}}<br/>
 				<a role="button" data-toggle="collapse" href="#collapseExample__{{$model.Number}}" aria-expanded="false">
 				  &nbsp;&nbsp;&nbsp;<b>模特个人照片+</b>
