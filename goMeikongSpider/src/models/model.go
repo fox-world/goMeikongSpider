@@ -14,6 +14,7 @@ type Page struct {
 	TotalRecord int
 	TotalPage   int
 	Pages       []int
+	URL         string
 }
 
 type Model struct {
